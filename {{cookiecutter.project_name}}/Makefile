@@ -52,7 +52,7 @@ build-and-publish: build publish ## Build and publish.
 .PHONY: publish
 publish: ## Publish a release to Azure Artifacts.
 	@echo "🚀 Publishing to Azure Artifacts."
-	@uv publish --index private-registry
+	@uv publish --publish-url https://pkgs.dev.azure.com/{{cookiecutter.azure_devops_organization}}/_packaging/{{cookiecutter.azure_devops_feed}}/pypi/upload/
 
 .PHONY: build-and-publish
 build-and-publish: build publish ## Build and publish.
