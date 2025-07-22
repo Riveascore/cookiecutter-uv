@@ -45,7 +45,5 @@
     "Apache Software License 2.0",
     "GNU General Public License v3",
     "Not open source"
-  ],
-  "azure_devops_organization": "chrisaga",
-  "azure_devops_feed": "private-python-feed"
+  ]
 }

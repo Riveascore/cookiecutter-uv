@@ -23,6 +23,40 @@ def move_dir(src: str, target: str) -> None:
     shutil.move(os.path.join(PROJECT_DIRECTORY, src), os.path.join(PROJECT_DIRECTORY, target))
 
 
+def update_azure_devops_config() -> None:
+    """Update Makefile with Azure DevOps configuration if it was provided."""
+    config_file = os.path.join(PROJECT_DIRECTORY, '..', '.cookiecutter_azure_config')
+    if os.path.exists(config_file):
+        # Read the Azure DevOps configuration
+        azure_config = {}
+        with open(config_file, 'r') as f:
+            for line in f:
+                key, value = line.strip().split('=', 1)
+                azure_config[key] = value
+
+        # Update Makefile with the correct Azure DevOps values
+        makefile_path = os.path.join(PROJECT_DIRECTORY, 'Makefile')
+        if os.path.exists(makefile_path):
+            with open(makefile_path, 'r') as f:
+                content = f.read()
+
+            # Replace the Azure DevOps placeholders with actual values
+            content = content.replace(
+                "{{cookiecutter.azure_devops_organization}}",
+                azure_config.get('azure_devops_organization', '')
+            )
+            content = content.replace(
+                "{{cookiecutter.azure_devops_feed}}",
+                azure_config.get('azure_devops_feed', '')
+            )
+
+            with open(makefile_path, 'w') as f:
+                f.write(content)
+
+        # Clean up the temporary config file
+        os.remove(config_file)
+
+
 if __name__ == "__main__":
     if "{{cookiecutter.include_github_actions}}" != "y":
         remove_dir(".github")
@@ -94,3 +128,6 @@ if __name__ == "__main__":
         if os.path.isdir("src"):
             remove_dir("src")
         move_dir("{{cookiecutter.project_slug}}", os.path.join("src", "{{cookiecutter.project_slug}}"))
+
+    # Update Azure DevOps configuration if provided
+    update_azure_devops_config()
