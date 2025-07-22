@@ -86,7 +86,7 @@ jobs:
           UV_INDEX_PRIVATE_REGISTRY_PASSWORD: {% raw %}${{ secrets.UV_INDEX_PRIVATE_REGISTRY_PASSWORD }}{% endraw %}
 
       - name: Publish package to Azure Artifacts
-        run: uv publish --index private-registry
+        run: uv publish --publish-url https://pkgs.dev.azure.com/{{cookiecutter.azure_devops_organization}}/_packaging/{{cookiecutter.azure_devops_feed}}/pypi/upload/
         env:
           UV_PUBLISH_USERNAME: {% raw %}${{ secrets.UV_PUBLISH_USERNAME }}{% endraw %}
           UV_PUBLISH_PASSWORD: {% raw %}${{ secrets.UV_PUBLISH_PASSWORD }}{% endraw %}
