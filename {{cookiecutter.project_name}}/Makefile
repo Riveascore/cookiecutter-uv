@@ -7,7 +7,8 @@ install: ## Install the virtual environment and install the pre-commit hooks
 .PHONY: check
 check: ## Run code quality tools.
 	@echo "🚀 Checking lock file consistency with 'pyproject.toml'"
-	@uv lock --locked
+	@uv lock --upgrade  # Regenerate if needed
+	@uv lock --locked   # Then verify consistency
 	@echo "🚀 Linting code: Running pre-commit"
 	@uv run pre-commit run -a
 	@echo "🚀 Static type checking: Running mypy"
@@ -52,7 +53,7 @@ build-and-publish: build publish ## Build and publish.
 .PHONY: publish
 publish: ## Publish a release to Azure Artifacts.
 	@echo "🚀 Publishing to Azure Artifacts."
-	@uv publish --index private-registry
+	@uv publish --publish-url https://pkgs.dev.azure.com/{{cookiecutter.azure_devops_organization}}/_packaging/{{cookiecutter.azure_devops_feed}}/pypi/upload/
 
 .PHONY: build-and-publish
 build-and-publish: build publish ## Build and publish.

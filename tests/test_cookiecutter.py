@@ -79,7 +79,13 @@ def test_cicd_contains_pypi_secrets(cookies, tmp_path):
 
 def test_cicd_contains_azure_artifacts_secrets(cookies, tmp_path):
     with run_within_dir(tmp_path):
-        result = cookies.bake(extra_context={"publish_python_package": "azure_artifacts"})
+        result = cookies.bake(
+            extra_context={
+                "publish_python_package": "azure_artifacts",
+                "azure_devops_organization": "test-org",
+                "azure_devops_feed": "test-feed",
+            }
+        )
         assert result.exit_code == 0
         assert is_valid_yaml(result.project_path / ".github" / "workflows" / "on-release-main.yml")
 
