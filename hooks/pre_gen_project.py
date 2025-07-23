@@ -51,7 +51,6 @@ if publish_option == "azure_artifacts":
         azure_feed = "{{cookiecutter.azure_devops_feed}}"
 
     # Write the updated values to a temporary file that can be read by post_gen_project
-    import os
     with open('.cookiecutter_azure_config', 'w') as f:
         f.write(f"azure_devops_organization={azure_org}\n")
         f.write(f"azure_devops_feed={azure_feed}\n")

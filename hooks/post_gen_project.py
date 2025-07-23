@@ -29,7 +29,7 @@ def update_azure_devops_config() -> None:
     if os.path.exists(config_file):
         # Read the Azure DevOps configuration
         azure_config = {}
-        with open(config_file, 'r') as f:
+        with open(config_file) as f:
             for line in f:
                 key, value = line.strip().split('=', 1)
                 azure_config[key] = value
@@ -37,7 +37,7 @@ def update_azure_devops_config() -> None:
         # Update Makefile with the correct Azure DevOps values
         makefile_path = os.path.join(PROJECT_DIRECTORY, 'Makefile')
         if os.path.exists(makefile_path):
-            with open(makefile_path, 'r') as f:
+            with open(makefile_path) as f:
                 content = f.read()
 
             # Replace the Azure DevOps placeholders with actual values
