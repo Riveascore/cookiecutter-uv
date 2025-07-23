@@ -41,16 +41,31 @@ if not re.match(PROJECT_SLUG_REGEX, project_slug):
 # Conditional prompting for Azure DevOps when publish_python_package is "azure_artifacts"
 publish_option = "{{cookiecutter.publish_python_package}}"
 if publish_option == "azure_artifacts":
-    print("\nAzure DevOps configuration required:")
-    azure_org = input("azure_devops_organization [{{cookiecutter.azure_devops_organization}}]: ").strip()
-    if not azure_org:
-        azure_org = "{{cookiecutter.azure_devops_organization}}"
+    # Get current values from cookiecutter context
+    current_org = "{{cookiecutter.azure_devops_organization}}"
+    current_feed = "{{cookiecutter.azure_devops_feed}}"
 
-    azure_feed = input("azure_devops_feed [{{cookiecutter.azure_devops_feed}}]: ").strip()
-    if not azure_feed:
-        azure_feed = "{{cookiecutter.azure_devops_feed}}"
+    # Only prompt if running interactively and values are not already provided
+    azure_org = current_org
+    azure_feed = current_feed
 
-    # Write the updated values to a temporary file that can be read by post_gen_project
-    with open('.cookiecutter_azure_config', 'w') as f:
-        f.write(f"azure_devops_organization={azure_org}\n")
-        f.write(f"azure_devops_feed={azure_feed}\n")
+    # Check if we're in an interactive environment and if values need to be provided
+    import sys
+    if sys.stdin.isatty() and (not current_org or not current_feed):
+        print("\nAzure DevOps configuration required:")
+        if not current_org:
+            azure_org = input(f"azure_devops_organization [{current_org}]: ").strip()
+            if not azure_org:
+                azure_org = current_org
+
+        if not current_feed:
+            azure_feed = input(f"azure_devops_feed [{current_feed}]: ").strip()
+            if not azure_feed:
+                azure_feed = current_feed
+
+    # Write the values to a temporary file that can be read by post_gen_project
+    # (only if they differ from defaults or if we're updating them)
+    if azure_org != current_org or azure_feed != current_feed:
+        with open('.cookiecutter_azure_config', 'w') as f:
+            f.write(f"azure_devops_organization={azure_org}\n")
+            f.write(f"azure_devops_feed={azure_feed}\n")
