@@ -51,6 +51,7 @@ if publish_option == "azure_artifacts":
 
     # Check if we're in an interactive environment and if values need to be provided
     import sys
+
     if sys.stdin.isatty() and (not current_org or not current_feed):
         print("\nAzure DevOps configuration required:")
         if not current_org:
@@ -66,6 +67,6 @@ if publish_option == "azure_artifacts":
     # Write the values to a temporary file that can be read by post_gen_project
     # (only if they differ from defaults or if we're updating them)
     if azure_org != current_org or azure_feed != current_feed:
-        with open('.cookiecutter_azure_config', 'w') as f:
+        with open(".cookiecutter_azure_config", "w") as f:
             f.write(f"azure_devops_organization={azure_org}\n")
             f.write(f"azure_devops_feed={azure_feed}\n")
